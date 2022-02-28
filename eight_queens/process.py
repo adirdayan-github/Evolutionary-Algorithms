@@ -1,20 +1,28 @@
+from math import comb
+
 import numpy as np
 
 
 def fitness_score(perm):
     for idx, val in enumerate(perm):
-        prime_diagonals = {}
-        secondary_diagonals = {}
-        if idx - val in prime_diagonals:
-            prime_diagonals[idx - val] += 1
+        prime_diag_counters = {}
+        secondary_diag_counters = {}
+        if idx - val in prime_diag_counters:
+            prime_diag_counters[idx - val] += 1
         else:
-            prime_diagonals[idx - val] = 1
+            prime_diag_counters[idx - val] = 1
 
-        if idx + val in secondary_diagonals:
-            secondary_diagonals[idx + val] += 1
+        if idx + val in secondary_diag_counters:
+            secondary_diag_counters[idx + val] += 1
         else:
-            secondary_diagonals[idx + val] = 1
-
+            secondary_diag_counters[idx + val] = 1
+    num_of_checks_on_primary_diagonals = sum(
+        [comb(n_queens_same_prime_diag, 2) for n_queens_same_prime_diag in prime_diag_counters.values()])
+    num_of_checks_on_secondary_diagonals = sum(
+        [comb(n_queens_same_secondary_diago, 2) for n_queens_same_secondary_diago in secondary_diag_counters.values()])
+    penalty = num_of_checks_on_primary_diagonals + num_of_checks_on_secondary_diagonals
+    fitness = 1 / penalty
+    return fitness
 
 
 def crossover(perm1, perm2):
