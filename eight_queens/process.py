@@ -1,5 +1,3 @@
-from math import comb
-
 import numpy as np
 
 
@@ -19,7 +17,7 @@ def fitness_score(perm):
     num_of_checks_on_primary_diagonals = sum([n * (n - 1) for n in prime_diag_counters.values()])
     num_of_checks_on_secondary_diagonals = sum([n * (n - 1) for n in secondary_diag_counters.values()])
     penalty = num_of_checks_on_primary_diagonals + num_of_checks_on_secondary_diagonals
-    fitness = 1 / penalty
+    fitness = 1 / (1 + penalty)
     return fitness
 
 
@@ -39,8 +37,8 @@ def mutate(perm):
     perm = perm.copy()
     if np.random.binomial(1, 0.8) == 1:
         i, j = np.random.choice(8, 2, replace=False)
-        perm[i], perm[j] = j, i
-    return perm
+        mutated_perm[i], mutated_perm[j] = mutated_perm[j], mutated_perm[i]
+    return mutated_perm
 
 
 if __name__ == '__main__':
